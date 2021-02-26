@@ -1,35 +1,35 @@
-import React, {useEffect, useState } from "react";
+import React, { useReducer} from "react";
 
-
-
-const App = (props)=>{
-  const [childVisible,setChildVisible] = useState(true)
-  const show = ()=>{
-    setChildVisible(true)
-  }
-  const hide =()=>{
-    setChildVisible(false)
-  }
-
-    return(
-      <div>
-        {childVisible ? <button onClick={hide}>hide</button> : <button onClick={show}>show</button>} 
-        {childVisible? <Child />: null}
-      </div>
-    )
+const initial = {
+  n:1
 }
 
-const Child=(props)=>{
-  useEffect(()=>{
-    return ()=>{
-      console.log('disapper')
-    }
-  })
-  return(
+const reducer = (state,action)=>{
+  if(action.type === 'add'){
+    return {n:state.n+action.number}
+  }else if(action.type ==='mult'){
+    return {n: state.n*2}
+  }else{
+    throw new Error('unknown type')
+  }
+}
+
+const App = ()=>{
+  const [state,dispatch]= useReducer(reducer,initial)
+  const add = ()=>{
+    dispatch({type: 'add',number : 1})
+  }
+  const mult =()=>{
+    dispatch({type: 'mult', number: 2})
+  }
+  return (
     <div>
-      child
+    <h1>n:{state.n}</h1>
+    <button onClick={add}>+2</button>
+    <button onClick={mult}>*2</button>
     </div>
   )
 }
+
 
 export default App;
